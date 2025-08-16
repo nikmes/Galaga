@@ -28,7 +28,9 @@ int main() {
     InitWindow(screenW, screenH, "SpaceInvaders - Galaga Prototype");
     SetTargetFPS(60);
 
-    Player player{ {screenW/2.0f, screenH - 40.0f} };
+    #include "player.h"
+    Player player;
+    player.init(screenW/2.0f, screenH - 40.0f);
 
     std::vector<Bullet> bullets;
     std::vector<Enemy> enemies;
@@ -57,16 +59,15 @@ int main() {
         float dt = GetFrameTime();
 
         // input
-        float move = 0.0f;
+    float move = 0.0f;
         if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) move -= 1.0f;
         if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) move += 1.0f;
-        player.pos.x += move * player.speed * dt;
-        if (player.pos.x < 20) player.pos.x = 20;
-        if (player.pos.x > screenW - 20) player.pos.x = screenW - 20;
+    player.x += move * player.speed * dt;
+    player.update(dt, (float)screenW);
 
         if (IsKeyPressed(KEY_SPACE)) {
             Bullet b;
-            b.pos = { player.pos.x, player.pos.y - 20 };
+            b.pos = { player.x, player.y - 20 };
             b.vel = { 0, -600 };
             bullets.push_back(b);
         }
